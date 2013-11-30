@@ -25,5 +25,5 @@ if len(sys.argv) == 5:
 	geraMulti(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]), float(sys.argv[4]))
 	exit()
 print "Usages:"
-print "python incidencia.py number_of_nodes prcentage_of_completion"
-print "python incidencia.py initial_number_of_nodes final_number_of_nodes increment prcentage_of_completion"
+print "python adjacencia.py number_of_nodes prcentage_of_completion"
+print "python adjacencia.py initial_number_of_nodes final_number_of_nodes increment prcentage_of_completion"
