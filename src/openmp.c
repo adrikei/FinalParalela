@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
 		}
 		
 		flag = 1;
-		#pragma omp parallel for private(i,j, num) num_threads(thread_count)
+		#pragma omp parallel for private(i,j, num) num_threads(thread_count	)
 		for(i = 0; i < tam; i++){
 			for(j = 0; j < tam; j++){
 				if((!num[i][j] && (i!=j))){ //diagonal sem ciclo
