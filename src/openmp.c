@@ -13,9 +13,6 @@ int main(int argc, char *argv[]) {
 	int tam, i, j, flag;
 	int** num;
 	
-
-
-	
 	do{
 		scanf("%d", &tam);
 		if(!tam) return 0;
@@ -31,7 +28,7 @@ int main(int argc, char *argv[]) {
 		}
 		
 		flag = 1;
-		#pragma omp parallel for shared(i,j)
+		#pragma omp parallel for private(i,j, num)
 		for(i = 0; i < tam; i++){
 			for(j = 0; j < tam; j++){
 				if((!num[i][j] && (i!=j))){ //diagonal sem ciclo
