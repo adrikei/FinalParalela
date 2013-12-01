@@ -1,27 +1,26 @@
-/*
- * Grupo 13:
- * 329550-Adriano Pais Rodrigues
- * 380075-Arthur Pessoa de Souza
- * 379980-João Eduardo Brandes Luiz
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <mpi.h>
+#include <time.h>
+#include <sys/time.h>
+#include <malloc.h>
+#include "include/tempo.h"
 
-#define MAX 1000
+#define MAX 20000
 int vetor[MAX][MAX];
 int main(){
 
 	int comm_size;   //Numero de processos total
 	int my_rank;   // identificacao do processo
-	
+	struct mallinfo mi;
 	int num_elem=0;
 	int i,j,resto;
 	int qtd_por_processo;
 	int flag=0,flag_g=0;
 	int limite=0;
+	double wall0,wall1;
+    	double cpu0,cpu1;
 	MPI_Init(NULL,NULL);
 	MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
@@ -29,7 +28,7 @@ int main(){
 		flag_g = 0;
 		flag = 0;
 		if(my_rank==0){
-			printf("\nEntre com o número de elementos: ");
+			//printf("\nEntre com o número de elementos: ");
 			scanf("%d",&num_elem);
 			if(num_elem == 0){
 				return 0;
@@ -39,7 +38,7 @@ int main(){
 		MPI_Bcast(&num_elem, 1, MPI_INT, 0, MPI_COMM_WORLD);
 		MPI_Barrier(MPI_COMM_WORLD);
 		if(my_rank==0){
-		printf("\nEntre com o vetor:\n");
+		//printf("\nEntre com o vetor:\n");
 		for(i = 0; i < num_elem; i++){
                         for(j = 0; j < num_elem; j++){
                                 scanf(" %d", &vetor[i][j]);
@@ -54,14 +53,7 @@ int main(){
 		
 		
 		MPI_Barrier(MPI_COMM_WORLD);
-		if(my_rank==1){
-			for(i = 0; i < num_elem; i++){
-                        for(j = 0; j < num_elem; j++){
-                                printf("%d", vetor[i][j]);
-                        }
-                        printf("\n");
-                }
-		}
+		
 		qtd_por_processo = (num_elem/comm_size);
 		resto = (num_elem%comm_size);
 		if(my_rank==0){
@@ -93,29 +85,46 @@ int main(){
 		if(my_rank < resto){
 			qtd_por_processo++;
 		}
+if(my_rank==0){
+		wall0 = get_wall_time();
+    		cpu0  = get_cpu_time();
+}
 		//printf("\nmy_rank: %d, limite: %d",my_rank,limite);
 		for(i=limite;i<limite+qtd_por_processo;i++){
 			for(j=0;j<num_elem;j++){
 				if(i!=j){
 					if(vetor[i][j]==0){
-					printf("\nFlag! %d %d %d",my_rank,i,j);
+					
+					flag=1;
+					}
+				}else{
+					if(vetor[i][j]==1){
+					
 					flag=1;
 					}
 				}
 			}
 		}
 		MPI_Reduce(&flag,&flag_g,1,MPI_INT,MPI_SUM,0,MPI_COMM_WORLD);
+		
 		if(my_rank==0){
-			printf("\nFlag_g: %d",flag_g);
+			
 			if(flag_g>=1){
-				printf("\nNot Complete!");
+				printf("Not Complete!");
 			}else{
-				printf("\nComplete!");
+				printf("Complete!");
 			}
 			
-		}
+		
+		wall1 = get_wall_time();
+   		cpu1  = get_cpu_time();
+		mi = mallinfo();
+		printf("\n MPIWALL %f ",wall1-wall0);
+		printf("\n MPICPU %f ",cpu1-cpu0);
+		printf("\n MPIMEM %d", mi.uordblks);
 		//printf("\nFlag: %d, Flag_g: %d",flag,flag_g);
 		//MPI_Bcast(&flag, 1, MPI_INT, 0, MPI_COMM_WORLD);
+}
 	}while(num_elem!=0);
 	MPI_Finalize();
 	
