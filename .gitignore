@@ -2,3 +2,5 @@
 src/bench
 
 *.in
+
+bin/*
