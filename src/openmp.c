@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 		#pragma omp parallel for shared(i,j)
 		for(i = 0; i < tam; i++){
 			for(j = 0; j < tam; j++){
-				if((!num[i][j] && (i!=j))||((i==j)&&num[i][j])){ //diagonal sem ciclo
+				if((!num[i][j] && (i!=j))){ //diagonal sem ciclo
 					flag = 0;
 					break;
 				}

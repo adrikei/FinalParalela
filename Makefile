@@ -15,7 +15,6 @@ FOPENMP=-fopenmp
 all:
 	$(CC) $(CFLAGS) $(INCLUDE) ./src/serial.c -o ./bin/serial
 	$(MPICC) $(CFLAGS) $(INCLUDE) ./src/mpi.c -o ./bin/mpi
-	$(CC) $(CFLAGS) $(INCLUDE) ./src/pthreads.c -o ./bin/pthreads -lpthread
 	$(CC) $(CFLAGS) $(FOPENMP) $(INCLUDE) ./src/openmp.c -o ./bin/openmp
 	$(CC) $(CFLAGS) $(INCLUDE) ./src/bench.c -o ./bin/bench
 
