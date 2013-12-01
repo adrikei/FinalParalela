@@ -2,3 +2,7 @@
 src/bench
 
 *.in
+
+bin/*
+
+*.exe
