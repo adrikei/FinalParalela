@@ -7,12 +7,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <omp.h>
 
 int main(int argc, char *argv[]) {
 	int tam, i, j, flag;
 	int** num;
 	
+
+
 	
 	do{
 		scanf("%d", &tam);
@@ -29,11 +31,13 @@ int main(int argc, char *argv[]) {
 		}
 		
 		flag = 1;
+		#pragma omp parallel for shared(i,j)
 		for(i = 0; i < tam; i++){
 			for(j = 0; j < tam; j++){
-				if((!num[i][j] && (i!=j))||((i==j)&&num[i][j])) //diagonal sem ciclo
+				if((!num[i][j] && (i!=j))||((i==j)&&num[i][j])){ //diagonal sem ciclo
 					flag = 0;
 					break;
+				}
 			}
 		}
 		
