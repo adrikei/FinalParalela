@@ -11,7 +11,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <malloc.h>
-#include "include/tempo.h"
+#include "tempo.h"
 
 int main(int argc, char *argv[]) {
         int tam, i, j, flag;
@@ -53,9 +53,9 @@ int main(int argc, char *argv[]) {
                 if(flag) printf("É completo\n");
                 else printf("Não é completo\n");
 
-		printf("\n OMPWALL %f ",wall1-wall0);
-		printf("\n OMPCPU %f ",cpu1-cpu0);
-		printf("\n OMPMEM %d",mi.uordblks);
+		printf("%f\n ",wall1-wall0);
+		printf("%f\n ",cpu1-cpu0);
+		printf("%d\n",mi.uordblks);
                 for(i = 0; i < tam; i++)free(num[i]);
                 free(num);
         

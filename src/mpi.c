@@ -5,7 +5,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <malloc.h>
-#include "include/tempo.h"
+#include "tempo.h"
 
 #define MAX 20000
 int vetor[MAX][MAX];
@@ -110,18 +110,18 @@ if(my_rank==0){
 		if(my_rank==0){
 			
 			if(flag_g>=1){
-				printf("Not Complete!");
+				printf("Not Complete!\n");
 			}else{
-				printf("Complete!");
+				printf("Complete!\n");
 			}
 			
 		
 		wall1 = get_wall_time();
    		cpu1  = get_cpu_time();
 		mi = mallinfo();
-		printf("\n MPIWALL %f ",wall1-wall0);
-		printf("\n MPICPU %f ",cpu1-cpu0);
-		printf("\n MPIMEM %d", mi.uordblks);
+		printf("%f\n ",wall1-wall0);
+		printf("%f\n ",cpu1-cpu0);
+		printf("%d\n", mi.uordblks);
 		//printf("\nFlag: %d, Flag_g: %d",flag,flag_g);
 		//MPI_Bcast(&flag, 1, MPI_INT, 0, MPI_COMM_WORLD);
 }
