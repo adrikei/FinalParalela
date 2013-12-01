@@ -11,15 +11,16 @@
 #include <time.h>
 #include <sys/time.h>
 #include <malloc.h>
-#include "include/tempo.h"
+#include "tempo.h"
 
 int main(int argc, char *argv[]) {
         int tam, i, j, flag;
         int** num;
         double wall0,wall1;
-    	double cpu0,cpu1;
+    	double start,finish,cpu_total;
         int thread_count = strtol(argv[1], NULL, 10);
 	struct mallinfo mi;
+	wall0 = get_wall_time();
         do{
                 scanf("%d", &tam);
                 if(!tam) return 0;
@@ -35,10 +36,14 @@ int main(int argc, char *argv[]) {
                                 scanf("%d", &num[i][j]);
                         }
                 }
-                wall0 = get_wall_time();
-    		cpu0  = get_cpu_time();
+                
+    		
                 flag = 1;
-                #pragma omp parallel for private(i,j) num_threads(thread_count)
+		
+		#pragma omp parallel private(start,finish) num_threads(thread_count)
+		{
+		GET_TIME(start);
+                #pragma omp parallel for private(i,j) shared(cpu_total) num_threads(thread_count)
                 for(i = 0; i < tam; i++){
                         for(j = 0; j < tam; j++){
                                 if((!num[i][j] && (i!=j))){ //diagonal sem ciclo
@@ -47,15 +52,19 @@ int main(int argc, char *argv[]) {
                                 }
                         }
                 }
+		GET_TIME(finish);
+		#pragma omp critical
+		cpu_total+=(finish-start);
+		}
                 wall1 = get_wall_time();
-    		cpu1  = get_cpu_time();
+    		
 		mi = mallinfo();
                 if(flag) printf("É completo\n");
                 else printf("Não é completo\n");
 
-		printf("\n OMPWALL %f ",wall1-wall0);
-		printf("\n OMPCPU %f ",cpu1-cpu0);
-		printf("\n OMPMEM %d",mi.uordblks);
+		printf("%f\n ",wall1-wall0);
+		printf("%f\n ",cpu_total);
+		printf("%d\n",mi.uordblks);
                 for(i = 0; i < tam; i++)free(num[i]);
                 free(num);
         

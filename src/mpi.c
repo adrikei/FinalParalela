@@ -5,7 +5,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <malloc.h>
-#include "include/tempo.h"
+#include "tempo.h"
 
 #define MAX 20000
 int vetor[MAX][MAX];
@@ -20,14 +20,18 @@ int main(){
 	int flag=0,flag_g=0;
 	int limite=0;
 	double wall0,wall1;
-    	double cpu0,cpu1;
+    	double cpu_total=0;
+	double cpu0,cpu1,cpu_local;
+	
 	MPI_Init(NULL,NULL);
 	MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 	do{
+		double start, finish;
 		flag_g = 0;
 		flag = 0;
 		if(my_rank==0){
+			wall0 = get_wall_time();
 			//printf("\nEntre com o número de elementos: ");
 			scanf("%d",&num_elem);
 			if(num_elem == 0){
@@ -85,10 +89,7 @@ int main(){
 		if(my_rank < resto){
 			qtd_por_processo++;
 		}
-if(my_rank==0){
-		wall0 = get_wall_time();
-    		cpu0  = get_cpu_time();
-}
+		GET_TIME(start);
 		//printf("\nmy_rank: %d, limite: %d",my_rank,limite);
 		for(i=limite;i<limite+qtd_por_processo;i++){
 			for(j=0;j<num_elem;j++){
@@ -105,23 +106,23 @@ if(my_rank==0){
 				}
 			}
 		}
+		GET_TIME(finish);
+		cpu_local=finish-start;
 		MPI_Reduce(&flag,&flag_g,1,MPI_INT,MPI_SUM,0,MPI_COMM_WORLD);
-		
+		MPI_Reduce(&cpu_local,&cpu_total,1,MPI_DOUBLE,MPI_SUM,0,MPI_COMM_WORLD);
 		if(my_rank==0){
-			
 			if(flag_g>=1){
-				printf("Not Complete!");
+				printf("Not Complete!\n");
 			}else{
-				printf("Complete!");
+				printf("Complete!\n");
 			}
 			
 		
 		wall1 = get_wall_time();
-   		cpu1  = get_cpu_time();
 		mi = mallinfo();
-		printf("\n MPIWALL %f ",wall1-wall0);
-		printf("\n MPICPU %f ",cpu1-cpu0);
-		printf("\n MPIMEM %d", mi.uordblks);
+		printf("%f\n ",wall1-wall0);
+		printf("%f\n ",cpu_total);
+		printf("%d\n", mi.uordblks);
 		//printf("\nFlag: %d, Flag_g: %d",flag,flag_g);
 		//MPI_Bcast(&flag, 1, MPI_INT, 0, MPI_COMM_WORLD);
 }
