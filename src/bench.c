@@ -8,6 +8,6 @@
 #include<stdlib.h>
 
 int main(void){
-	system("bash ./bench.sh");
+	system("bash ../bench.sh");
 	return 0;
 }

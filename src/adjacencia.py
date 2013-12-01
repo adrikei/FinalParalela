@@ -3,7 +3,7 @@
  * Grupo 13:
  * 329550-Adriano Pais Rodrigues
  * 380075-Arthur Pessoa de Souza
- * 379980-João Eduardo Brandes Luiz
+ * 379980-Joao Eduardo Brandes Luiz
 */
 '''
 
