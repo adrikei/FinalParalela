@@ -14,14 +14,15 @@ int main(int argc, char *argv[]) {
 	int tam, i, j, flag;
 	int** num;
 	
-	scanf("%d", &tam);
-	num = (int**) malloc(sizeof(int*)*MAX);
 	
-	for(i = 0; i < MAX; i++){
-		num[i] = (int*) malloc(sizeof(int)*MAX);
-	}
 	
-	while(tam != 0){
+	do{
+		scanf("%d", &tam);
+		if(!tam) return 0;
+
+		num = (int**) malloc(sizeof(int*)*tam);
+		
+		for(i = 0; i < tam; i++)num[i] = (int*) malloc(sizeof(int)*tam);
 		
 		for(i = 0; i < tam; i++){
 			for(j = 0; j < tam; j++){
@@ -32,18 +33,15 @@ int main(int argc, char *argv[]) {
 		flag = 1;
 		for(i = 0; i < tam; i++){
 			for(j = 0; j < tam; j++){
-				if(!num[i][j])
+				if((!num[i][j] && (i!=j))||((i==j)&&num[i][j])) //diagonal sem ciclo
 					flag = 0;
 			}
 		}
 		
-		if(flag){
-			printf("É completo\n");
-		}else{
-			printf("Não é completo\n");
-		}
-		scanf("%d", &tam);	
-	}
+		if(flag) printf("É completo\n");
+		else     printf("Não é completo\n");
+		
+	}while(tam != 0);
 	
 	for(i = 0; i < MAX; i++){
 		free(num[i]);
