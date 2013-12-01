@@ -13,6 +13,8 @@ int main(int argc, char *argv[]) {
 	int tam, i, j, flag;
 	int** num;
 	
+	int thread_count = strtol(argv[1], NULL, 10); 
+
 	do{
 		scanf("%d", &tam);
 		if(!tam) return 0;
@@ -28,7 +30,7 @@ int main(int argc, char *argv[]) {
 		}
 		
 		flag = 1;
-		#pragma omp parallel for private(i,j, num)
+		#pragma omp parallel for private(i,j, num) num_threads(thread_count)
 		for(i = 0; i < tam; i++){
 			for(j = 0; j < tam; j++){
 				if((!num[i][j] && (i!=j))){ //diagonal sem ciclo
