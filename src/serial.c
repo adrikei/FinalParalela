@@ -8,12 +8,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX 10000
 
 int main(int argc, char *argv[]) {
 	int tam, i, j, flag;
 	int** num;
-	
 	
 	
 	do{
@@ -35,19 +33,16 @@ int main(int argc, char *argv[]) {
 			for(j = 0; j < tam; j++){
 				if((!num[i][j] && (i!=j))||((i==j)&&num[i][j])) //diagonal sem ciclo
 					flag = 0;
+					break;
 			}
 		}
 		
 		if(flag) printf("É completo\n");
 		else     printf("Não é completo\n");
-		
+
+		for(i = 0; i < tam; i++)free(num[i]);
+		free(num);
+	
 	}while(tam != 0);
-	
-	for(i = 0; i < MAX; i++){
-		free(num[i]);
-	}
-	
-	free(num);
-		
 	return 0;
 }
